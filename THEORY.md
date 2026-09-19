@@ -212,3 +212,64 @@ The next experiment tests orders K in {1,2,3,4,6,8}. This does not prove FMCO:
 failure of a particular update family is only evidence. A theorem would require
 a clearly defined class of admissible finite-moment compression algorithms and
 an adversarial indistinguishability or approximation lower bound.
+
+
+## 10. Narrowed theorem target: Local Gaussian State Obstruction (LGSO)
+
+The finite-moment experiments are useful diagnostically but are too broad and
+algorithm-dependent for a theorem. We therefore narrow the class.
+
+Consider d=1 and algorithms with state S_t=(m_t,h_t), h_t>0, prediction
+
+  p_t = Phi(m_t,h_t)
+
+for a smooth map Phi, and updates
+
+  m_{t+1} = m_t + A(m_t,h_t,g_t,c_t),
+  h_{t+1} = h_t + B(m_t,h_t,g_t,c_t),
+
+where g_t and c_t are the local logistic gradient and curvature at m_t.
+Assume:
+
+1. Locality: A and B use the history only through (m_t,h_t,g_t,c_t).
+2. Gaussian-tail regularity: for large positive m and h, Phi(m,h) has the same
+   first-order tail form as a Gaussian logistic mixture, namely
+
+      1 - Phi(m,h) >= a * exp(-b m)
+
+   on the all-positive stream for fixed constants a,b>0.
+3. Curvature accumulation: h_t grows at least monotonically and at most
+   polynomially in t.
+4. Mean drift: m_t grows sublogarithmically or as alpha log t with coefficient
+   alpha too small to match the exact Bayesian predictive tail.
+
+### Candidate theorem (LGSO)
+
+For the all-positive sequence x_t=1,y_t=+1, if the above assumptions imply
+
+  1-p_t >= c t^{-q}
+
+with q <= 1,
+
+then cumulative learner loss satisfies
+
+  sum_t -log p_t >= c' * {
+      T^(1-q),  q<1,
+      log T,    q=1
+  }.
+
+If exact EW on the same prior has strictly smaller asymptotic loss growth, then
+the approximation tax cannot be O(log T) in the q<1 case and may have a strictly
+larger logarithmic constant in the q=1 case.
+
+This reduces the problem to an asymptotic tail-rate comparison rather than an
+opaque moment argument.
+
+### What remains to prove
+
+A theorem needs:
+- an exact asymptotic for the EW predictive tail on the all-positive stream;
+- a derived tail exponent for the local Gaussian update;
+- a strict exponent/constant separation.
+
+The executable experiments now estimate these exponents directly.
