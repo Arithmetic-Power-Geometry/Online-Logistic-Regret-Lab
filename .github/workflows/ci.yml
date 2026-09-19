@@ -21,6 +21,7 @@ jobs:
       - run: python experiments/exact_vs_gaussian_1d.py > exact_vs_gaussian_results.json
       - run: python experiments/skew_repair_1d.py > skew_repair_results.json
       - run: python experiments/moment_compression_1d.py > moment_compression_results.json
+      - run: python experiments/tail_exponent_1d.py > tail_exponent_results.json
       - uses: actions/upload-artifact@v4
         with:
           name: theorem-lab-results
@@ -29,3 +30,4 @@ jobs:
             exact_vs_gaussian_results.json
             skew_repair_results.json
             moment_compression_results.json
+            tail_exponent_results.json
