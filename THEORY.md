@@ -99,3 +99,31 @@ Counterexample:
   then formulate the obstruction theorem instead.
 
 No paper until one of these is established.
+
+
+## 7. Direct approximation-tax falsification
+
+Comparator regret alone cannot validate CBAP, because it mixes statistical
+regret with posterior-approximation error. We therefore compare the Gaussian
+candidate directly against an exact 1D Bayesian/exponential-weights predictor.
+
+For a sequence s=(x_t,y_t), define
+
+  Tax_T(s) = sum_t [
+      ell_log(p_t^G, y_t) - ell_log(p_t^*, y_t)
+  ].
+
+CBAP requires this tax to admit a logarithmic information-budget control.
+A single large finite-T value is not by itself a disproof. The relevant signal
+is a sequence family s_T for which Tax_T grows asymptotically faster than every
+candidate logarithmic curvature budget while all stated assumptions remain true.
+
+The automated search records, for increasing T:
+- cumulative Gaussian-vs-exact tax,
+- Tax_T / log(1+T),
+- cumulative squared leverage proxy,
+- worst one-step approximation tax,
+- separable, reversal, and alternating adversaries.
+
+If Tax_T/log(1+T) grows systematically, the naive CBAP formulation is rejected
+and the next target is an explicit counterexample theorem.
