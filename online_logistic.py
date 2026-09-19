@@ -138,3 +138,49 @@ class SkewCorrectedGaussian1D:
         self.skew += self.skew_rate * standardized
         self.skew = float(np.clip(self.skew, -self.skew_cap, self.skew_cap))
         self.base.update(np.array([x1]), y)
+
+
+class MomentCorrectedGaussian1D:
+    """Experimental finite-moment correction family.
+
+    Extends the Gaussian state with K residual-moment accumulators. The
+    prediction correction is a bounded polynomial in standardized residual
+    memory. This is a falsification scaffold for fixed-dimensional moment
+    compression, not a claimed optimal algorithm.
+    """
+
+    def __init__(self, order=1, prior_precision=1.0, damping=0.5, quadrature=24,
+                 rate=0.02, cap=4.0):
+        self.base = GaussianLaplacePredictor(
+            1, prior_precision=prior_precision, damping=damping, quadrature=quadrature
+        )
+        self.order = int(order)
+        self.rate = float(rate)
+        self.cap = float(cap)
+        self.moments = np.zeros(self.order)
+
+    def variance_along(self, x):
+        return self.base.variance_along(x)
+
+    def predict(self, x):
+        x1 = float(np.asarray(x).reshape(-1)[0])
+        p0 = self.base.predict(np.array([x1]))
+        p0c = float(np.clip(p0, 1e-15, 1 - 1e-15))
+        logit0 = math.log(p0c / (1 - p0c))
+        var = max(self.variance_along(np.array([x1])), 1e-12)
+        scale = math.sqrt(var)
+        correction = 0.0
+        for j, m in enumerate(self.moments, start=1):
+            correction += m * (scale ** j)
+        return float(sigmoid(np.array([logit0 + correction]))[0])
+
+    def update(self, x, y):
+        x1 = float(np.asarray(x).reshape(-1)[0])
+        p = self.predict(np.array([x1]))
+        residual = (1.0 if y == 1 else 0.0) - p
+        var = max(self.variance_along(np.array([x1])), 1e-12)
+        standardized = residual / math.sqrt(var)
+        for j in range(1, self.order + 1):
+            self.moments[j - 1] += self.rate * (standardized ** j)
+        self.moments = np.clip(self.moments, -self.cap, self.cap)
+        self.base.update(np.array([x1]), y)
