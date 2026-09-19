@@ -29,6 +29,7 @@ jobs:
       - run: python experiments/score_calibration_1d.py > score_calibration_1d_results.json
       - run: python experiments/score_nullity_ambiguity.py > score_nullity_ambiguity_results.json
       - run: python experiments/stein_closure_growth.py > stein_closure_growth_results.json
+      - run: python experiments/rational_logistic_approx.py > rational_logistic_approx_results.json
       - uses: actions/upload-artifact@v4
         with:
           name: theorem-lab-results
@@ -45,3 +46,4 @@ jobs:
             score_calibration_1d_results.json
             score_nullity_ambiguity_results.json
             stein_closure_growth_results.json
+            rational_logistic_approx_results.json
