@@ -8,6 +8,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: ${{ github.workspace }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -16,7 +18,10 @@ jobs:
       - run: pip install -r requirements.txt pytest
       - run: pytest -q
       - run: python experiments/adversarial_search.py > adversarial_results.json
+      - run: python experiments/exact_vs_gaussian_1d.py > exact_vs_gaussian_results.json
       - uses: actions/upload-artifact@v4
         with:
-          name: adversarial-results
-          path: adversarial_results.json
+          name: theorem-lab-results
+          path: |
+            adversarial_results.json
+            exact_vs_gaussian_results.json
