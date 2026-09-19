@@ -185,3 +185,30 @@ Do not patch the same Gaussian rule blindly. The next target is either:
 1. prove TSCD for a well-defined broad class of local Gaussian-state updates; or
 2. add an explicit skew/tail state variable and test whether the missing
    information can be summarized compactly enough to recover logarithmic tax.
+
+
+## 9. One-skew-state repair also fails asymptotically
+
+The skew-corrected prototype substantially reduces the separable all-positive
+tax, but does not restore O(log T) behavior:
+
+- T=32:   skew Tax/log(1+T) ~= 2.30
+- T=64:   ~= 2.95
+- T=128:  ~= 3.71
+- T=256:  ~= 4.56
+- T=512:  ~= 5.54
+- T=1024: ~= 7.33
+
+Thus one extra scalar asymmetry memory is insufficient for the tested family.
+
+This suggests a stronger hypothesis:
+
+**Finite-Moment Compression Obstruction (FMCO), conjectural.**
+For separable online logistic prediction, no fixed-order local moment summary of
+a Gaussian approximation is guaranteed to preserve the exact EW predictive
+distribution with O(log T) cumulative approximation tax uniformly in T.
+
+The next experiment tests orders K in {1,2,3,4,6,8}. This does not prove FMCO:
+failure of a particular update family is only evidence. A theorem would require
+a clearly defined class of admissible finite-moment compression algorithms and
+an adversarial indistinguishability or approximation lower bound.
