@@ -127,3 +127,61 @@ The automated search records, for increasing T:
 
 If Tax_T/log(1+T) grows systematically, the naive CBAP formulation is rejected
 and the next target is an explicit counterexample theorem.
+
+
+## 8. Counterexample found: curvature-only Gaussian compression fails
+
+The CI scaling experiment falsifies the naive CBAP for the current
+GaussianLaplacePredictor.
+
+Take d=1, x_t=1, y_t=+1 for every t, with the same Gaussian prior used by the
+exact-grid Bayesian benchmark.
+
+Observed cumulative approximation tax:
+- T=32:   Tax_T ~= 9.30
+- T=64:   Tax_T ~= 15.24
+- T=128:  Tax_T ~= 24.36
+- T=256:  Tax_T ~= 38.40
+- T=512:  Tax_T ~= 60.17
+- T=1024: Tax_T ~= 94.10
+
+Meanwhile the candidate cumulative squared-leverage proxy remains bounded near
+5.5. Therefore no inequality of the proposed form
+
+  Tax_T <= C * sum_t min{1, lambda_t^2}
+
+can hold uniformly for this algorithm with a universal constant C.
+
+Moreover Tax_T/log(1+T) grows from about 2.66 at T=32 to about 13.57 at T=1024,
+which is strong empirical evidence against an O(log T) approximation tax.
+
+### Mechanism
+
+Under a one-sided separable stream, the exact EW posterior becomes strongly
+asymmetric and keeps substantial one-sided tail geometry relevant to prediction.
+The compact Gaussian update retains only a center and curvature matrix. Its
+local variance shrinks, so a curvature-only budget declares the state
+"increasingly resolved", yet its predictive tail bias persists. Thus local
+curvature can decrease while cumulative log-loss distortion continues to grow.
+
+### Candidate obstruction principle
+
+**Tail-Skew / Curvature Decoupling (TSCD), conjectural theorem form.**
+
+For adversarial online logistic prediction, any posterior-compression rule whose
+prediction is determined solely by a Gaussian state (mean plus local covariance)
+updated by local gradient/curvature information need not admit a cumulative
+approximation-error bound controlled only by a logarithmic determinant or
+summable leverage budget. In separable regimes, posterior skew/tail geometry can
+remain decision-relevant after local curvature has become small.
+
+This is not yet a theorem for all Gaussian-state algorithms. What is proved by
+the executable counterexample is only failure of the specific current update
+and failure of the proposed universal leverage inequality for it.
+
+### Next theorem target
+
+Do not patch the same Gaussian rule blindly. The next target is either:
+1. prove TSCD for a well-defined broad class of local Gaussian-state updates; or
+2. add an explicit skew/tail state variable and test whether the missing
+   information can be summarized compactly enough to recover logarithmic tax.
