@@ -273,3 +273,53 @@ A theorem needs:
 - a strict exponent/constant separation.
 
 The executable experiments now estimate these exponents directly.
+
+
+## 11. Tail-exponent separation observed
+
+The CI tail experiment on x_t=1,y_t=+1 through T=4096 gives an empirical
+power-law separation at the final checkpoints:
+
+  1 - p_t^EW  ~ t^{-q_EW},   q_EW ~= 1.28
+  1 - p_t^G   ~ t^{-q_G},    q_G  ~= 0.63
+
+These values are empirical fits, not theorem constants.
+
+### Loss-growth lemma
+
+Let p_t be any predictor on the all-positive stream. If for all sufficiently
+large t,
+
+  1 - p_t >= c t^{-q}
+
+with 0 <= q < 1, then because -log(1-u) >= u for u in [0,1),
+
+  sum_{t=1}^T -log p_t
+  >= c sum_{t=t0}^T t^{-q}
+  = Omega(T^{1-q}).
+
+If instead
+
+  1 - p_t <= C t^{-r}
+
+with r>1, then using -log(1-u) <= 2u for all sufficiently small u,
+
+  sum_t -log p_t < infinity.
+
+Therefore, if the empirical exponent separation can be upgraded to rigorous
+bounds q_G<1<q_EW for the same prior and stream, then the Gaussian-state
+approximation tax satisfies
+
+  Tax_T = Omega(T^{1-q_G}),
+
+which is strictly larger than O(log T).
+
+### Current theorem bottleneck
+
+We still need analytic tail bounds, not fitted exponents:
+1. prove an upper bound 1-p_t^EW <= C t^{-1-epsilon};
+2. prove a lower bound 1-p_t^G >= c t^{-q} with q<1
+   for the stated local Gaussian recursion.
+
+The next experiment stresses stability over horizon and prior variance before
+attempting a symbolic proof.
