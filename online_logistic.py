@@ -101,3 +101,40 @@ class ExactGridBayes1D:
         if not np.isfinite(s) or s <= 0:
             raise FloatingPointError("ExactGridBayes1D weights collapsed")
         self.w /= s
+
+
+class SkewCorrectedGaussian1D:
+    """Experimental 1D Gaussian state with one tail/skew correction.
+
+    State: Gaussian mean/precision plus a signed skew accumulator derived from
+    standardized residual surprise. Prediction adjusts the Gaussian logit by
+    a bounded skew term. This is a falsification prototype, not a theorem.
+    """
+
+    def __init__(self, prior_precision=1.0, damping=0.5, quadrature=24, skew_rate=0.05, skew_cap=6.0):
+        self.base = GaussianLaplacePredictor(
+            1, prior_precision=prior_precision, damping=damping, quadrature=quadrature
+        )
+        self.skew = 0.0
+        self.skew_rate = float(skew_rate)
+        self.skew_cap = float(skew_cap)
+
+    def variance_along(self, x):
+        return self.base.variance_along(x)
+
+    def predict(self, x):
+        x1 = float(np.asarray(x).reshape(-1)[0])
+        p0 = self.base.predict(np.array([x1]))
+        logit0 = math.log(np.clip(p0, 1e-15, 1 - 1e-15) / np.clip(1 - p0, 1e-15, 1))
+        correction = self.skew * math.sqrt(max(self.variance_along(np.array([x1])), 1e-12))
+        return float(sigmoid(np.array([logit0 + correction]))[0])
+
+    def update(self, x, y):
+        x1 = float(np.asarray(x).reshape(-1)[0])
+        p = self.predict(np.array([x1]))
+        residual = (1.0 if y == 1 else 0.0) - p
+        var = max(self.variance_along(np.array([x1])), 1e-12)
+        standardized = residual / math.sqrt(var)
+        self.skew += self.skew_rate * standardized
+        self.skew = float(np.clip(self.skew, -self.skew_cap, self.skew_cap))
+        self.base.update(np.array([x1]), y)
