@@ -75,3 +75,29 @@ class GaussianLaplacePredictor:
         self.H += curv * np.outer(x, x)
         step = np.linalg.solve(self.H, grad)
         self.m -= self.damping * step
+
+
+class ExactGridBayes1D:
+    """Exact-on-grid Bayesian benchmark for d=1."""
+
+    def __init__(self, prior_var=25.0, grid_radius=12.0, grid_size=20001):
+        self.theta = np.linspace(-grid_radius, grid_radius, grid_size)
+        logw = -0.5 * self.theta**2 / prior_var
+        logw -= np.max(logw)
+        self.w = np.exp(logw)
+        self.w /= np.sum(self.w)
+
+    def predict(self, x):
+        x1 = float(np.asarray(x).reshape(-1)[0])
+        probs = sigmoid(self.theta * x1)
+        return float(np.dot(self.w, probs))
+
+    def update(self, x, y):
+        x1 = float(np.asarray(x).reshape(-1)[0])
+        probs = sigmoid(self.theta * x1)
+        like = probs if y == 1 else (1.0 - probs)
+        self.w *= np.maximum(like, 1e-300)
+        s = np.sum(self.w)
+        if not np.isfinite(s) or s <= 0:
+            raise FloatingPointError("ExactGridBayes1D weights collapsed")
+        self.w /= s
