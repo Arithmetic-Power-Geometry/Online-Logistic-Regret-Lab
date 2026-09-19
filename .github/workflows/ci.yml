@@ -34,6 +34,7 @@ jobs:
       - run: python experiments/pole_geometry_scaling.py > pole_geometry_scaling_results.json
       - run: python experiments/approximation_tax_schedule.py > approximation_tax_schedule_results.json
       - run: python experiments/query_projection_adversary_2d.py > query_projection_adversary_2d_results.json
+      - run: python experiments/oracle_mean_cov_prc_2d.py > oracle_mean_cov_prc_2d_results.json
       - uses: actions/upload-artifact@v4
         with:
           name: theorem-lab-results
@@ -55,3 +56,4 @@ jobs:
             pole_geometry_scaling_results.json
             approximation_tax_schedule_results.json
             query_projection_adversary_2d_results.json
+            oracle_mean_cov_prc_2d_results.json
