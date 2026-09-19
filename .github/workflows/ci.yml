@@ -36,6 +36,7 @@ jobs:
       - run: python experiments/query_projection_adversary_2d.py > query_projection_adversary_2d_results.json
       - run: python experiments/oracle_mean_cov_prc_2d.py > oracle_mean_cov_prc_2d_results.json
       - run: python experiments/oracle_skew_prc_2d.py > oracle_skew_prc_2d_results.json
+      - run: python experiments/matched_moment_reachable_search.py > matched_moment_reachable_search_results.json
       - uses: actions/upload-artifact@v4
         with:
           name: theorem-lab-results
@@ -59,3 +60,4 @@ jobs:
             query_projection_adversary_2d_results.json
             oracle_mean_cov_prc_2d_results.json
             oracle_skew_prc_2d_results.json
+            matched_moment_reachable_search_results.json
