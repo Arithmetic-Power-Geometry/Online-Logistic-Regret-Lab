@@ -1,0 +1,21 @@
+name: Metric Volume Adversary 2D
+on:
+  push:
+    paths:
+      - 'experiments/metric_volume_adversary_2d.py'
+      - '.github/workflows/metric-volume-2d.yml'
+  workflow_dispatch:
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install numpy
+      - run: python experiments/metric_volume_adversary_2d.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: metric-volume-results
+          path: metric_volume_adversary_2d_results.json
