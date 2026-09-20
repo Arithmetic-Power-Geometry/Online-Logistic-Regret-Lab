@@ -1,6 +1,14 @@
 # Online Logistic Regret Lab
 
-Research code and reproducibility materials for efficient online logistic regression.
+Research code and reproducibility materials for:
+
+**Compressing Exponential Weights for Online Logistic Regression: Exact Identities, Update-Closed Surrogates, and a Geometric Bottleneck**
+
+## Paper
+
+Akhtar, M. A. K. (2026). *Compressing Exponential Weights for Online Logistic Regression: Exact Identities, Update-Closed Surrogates, and a Geometric Bottleneck* (Version V1). Zenodo. https://doi.org/10.5281/zenodo.22859032
+
+DOI: https://doi.org/10.5281/zenodo.22859032
 
 ## Problem setting
 
@@ -16,7 +24,7 @@ The project studies whether near-optimal exponential-weights (EW) prediction can
 
 ## Main research direction
 
-The current architecture uses the exact decomposition
+The architecture uses the exact decomposition
 
     log(1+exp(-yz)) = log 2 - yz/2 + log cosh(z/2),
 
@@ -56,6 +64,7 @@ These experiments validate the computational mechanism in one dimension. They do
 - benchmarks/ — synthetic OGD/ONS benchmark harness.
 - results/ — recorded validation summaries.
 - .github/workflows/ — reproducibility workflows.
+- paper/ — manuscript-facing companion metadata.
 
 ## Reproduction
 
@@ -71,6 +80,12 @@ python benchmarks/compare_existing.py
 ## Scope
 
 The repository does not claim that the general online-logistic-regression open problem is solved. The unrestricted multidimensional Hessian-metric volume/packing step remains open.
+
+## Citation
+
+Please cite the paper as:
+
+Akhtar, M. A. K. (2026). *Compressing Exponential Weights for Online Logistic Regression: Exact Identities, Update-Closed Surrogates, and a Geometric Bottleneck* (Version V1). Zenodo. https://doi.org/10.5281/zenodo.22859032
 
 ## License
 
