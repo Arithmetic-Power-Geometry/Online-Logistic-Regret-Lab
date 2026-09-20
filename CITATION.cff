@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use this software or its reproducibility artifacts, please cite the repository and the associated manuscript."
+message: "If you use this software or its reproducibility materials, please cite this repository."
 title: "Online Logistic Regret Lab"
 type: software
 authors:
