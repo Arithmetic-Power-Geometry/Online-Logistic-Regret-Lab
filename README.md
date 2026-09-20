@@ -61,3 +61,31 @@ Do NOT claim a breakthrough unless all hold:
 6. Literature search finds no equivalent prior result.
 
 See THEORY.md and experiments/.
+
+
+## Software benchmark and license
+
+Copyright (C) 2026 Mohammad Amir Khusru Akhtar.
+
+This repository is licensed under the Apache License, Version 2.0; see
+`LICENSE` and `NOTICE`.
+
+Reproducible software validation is provided by:
+
+- `benchmarks/compare_existing.py`
+- `tests/test_benchmarks.py`
+- `.github/workflows/software-benchmark.yml`
+- `benchmarks/BENCHMARK_SNAPSHOT.md`
+
+Run locally:
+
+```bash
+pip install -r requirements.txt
+pip install pytest
+pytest -q
+python benchmarks/compare_existing.py
+```
+
+The benchmark distinguishes implemented baselines from published theoretical
+comparators. It does not attribute runtime measurements to external algorithms
+unless their exact implementation is included.
