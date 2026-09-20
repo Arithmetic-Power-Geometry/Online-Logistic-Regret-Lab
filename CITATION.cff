@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use this software or its reproducibility materials, please cite this repository."
+message: "If you use this software or its reproducibility materials, please cite the associated paper."
 title: "Online Logistic Regret Lab"
 type: software
 authors:
@@ -8,3 +8,13 @@ authors:
 year: 2026
 repository-code: "https://github.com/Arithmetic-Power-Geometry/Online-Logistic-Regret-Lab"
 license: Apache-2.0
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "Akhtar"
+      given-names: "Mohammad Amir Khusru"
+  title: "Compressing Exponential Weights for Online Logistic Regression: Exact Identities, Update-Closed Surrogates, and a Geometric Bottleneck"
+  year: 2026
+  version: "V1"
+  doi: "10.5281/zenodo.22859032"
+  url: "https://doi.org/10.5281/zenodo.22859032"
