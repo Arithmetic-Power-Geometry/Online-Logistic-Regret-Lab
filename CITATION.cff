@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software or its reproducibility artifacts, please cite the repository and the associated manuscript."
+title: "Online Logistic Regret Lab"
+type: software
+authors:
+  - family-names: "Akhtar"
+    given-names: "Mohammad Amir Khusru"
+year: 2026
+repository-code: "https://github.com/Arithmetic-Power-Geometry/Online-Logistic-Regret-Lab"
+license: Apache-2.0
