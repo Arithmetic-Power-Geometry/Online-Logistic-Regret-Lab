@@ -88,3 +88,25 @@ class LogCoshMomentSurrogate1D:
         return float(w@sigmoid(self.grid*x))
     def state_size(self):
         return 2+len(self.moments)
+
+
+class QuadratureLogCoshSurrogate1D(LogCoshMomentSurrogate1D):
+    """Same update-closed state, evaluated by Gauss-Legendre quadrature."""
+    def __init__(self,B=5.0,R=1.0,degree=18,nodes=48):
+        super().__init__(B=B,R=R,degree=degree,n_grid=101)
+        self.nodes=int(nodes)
+        z,w=np.polynomial.legendre.leggauss(self.nodes)
+        self.qtheta=B*z; self.qweight=B*w
+    def potential_at(self,th):
+        th=np.asarray(th,dtype=float)
+        F=np.full_like(th,self.n*math.log(2.0))-0.5*self.b*th
+        c=self.poly.coef
+        for k,S in self.moments.items():
+            if k<len(c): F += c[k]*S*(th**k)
+        return F
+    def predict(self,x):
+        F=self.potential_at(self.qtheta)
+        a=-F; a-=a.max()
+        ww=self.qweight*np.exp(a)
+        den=ww.sum()
+        return float((ww*sigmoid(self.qtheta*x)).sum()/den)
