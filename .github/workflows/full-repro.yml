@@ -1,0 +1,30 @@
+name: Full Reproducibility Suite
+on:
+  push:
+    paths:
+      - 'software/**'
+      - 'benchmarks/**'
+      - 'experiments/**'
+      - 'tests/**'
+      - '.github/workflows/full-repro.yml'
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: pip install -r requirements.txt
+      - run: pip install pytest
+      - run: pytest -q
+      - run: python software/run_fixed_d_validation.py
+      - run: python benchmarks/compare_existing.py
+      - run: python experiments/metric_volume_adversary_2d.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: full-repro-results
+          path: |
+            software_results.json
+            benchmark_results.json
+            metric_volume_adversary_2d_results.json
